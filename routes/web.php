@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +29,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::name('admin.')->namespace('Admin')->prefix('admin')->group(function(){
+    Route::namespace('Auth')->middleware('guest:admin')->group(function(){
+        //login route
+        Route::get('/login',[LoginController::class,'login'])->name('login');
+        Route::post('/login',[LoginController::class,'processLogin']);
+    });
+    Route::namespace('Auth')->middleware('auth:admin')->group(function(){
+        Route::post('/logout',function(Request $request){
+            Auth::guard('admin')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->action([
+                LoginController::class,
+                'login'
+            ]);
+        })->name('logout');
+    });
 });
 
 require __DIR__.'/auth.php';
