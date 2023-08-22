@@ -50,4 +50,10 @@ Route::name('admin.')->namespace('Admin')->prefix('admin')->group(function(){
     });
 });
 
+Route::middleware('auth:admin')->name('admin.')->prefix('admin')->group(function(){
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+});
+
 require __DIR__.'/auth.php';
