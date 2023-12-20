@@ -57,3 +57,7 @@ Route::middleware('auth:admin')->name('admin.')->prefix('admin')->group(function
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/test',function (){
+    return 'pass';
+})->middleware(EnsureTokenlsValid::class);
