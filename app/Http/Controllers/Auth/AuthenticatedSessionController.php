@@ -25,16 +25,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->authenticate();//檢查帳密
 
-        $request->session()->regenerate();
+        $request->session()->regenerate();//產生新對話
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME);//導向何處
     }
 
     /**
      * Destroy an authenticated session.
      */
+
+
+    //logout 登出
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
